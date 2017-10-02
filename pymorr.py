@@ -5,6 +5,12 @@ class Pymorr:
         self.root = ""
 
     def set_root(self, input):
+        """Sets the root path for all operations.
+         Parameters
+         ----------
+            input : str
+                a valid path to set as root
+        """
         self.root = input
         print(self.root)
 
