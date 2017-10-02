@@ -15,6 +15,7 @@ class Pymorr:
         print(self.root)
 
     def list_files_of_root(self):
+        """Prints all files that are in the directory of root"""
         print('root' + self.root)
         if self.root:
             return os.listdir(self.root)
