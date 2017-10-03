@@ -26,9 +26,9 @@ class Pymorr:
         else:
             return os.listdir()
 
-    def get_images_of_root(self):
+    def get_image_paths_from_root(self):
         """
-        finds all images of root path
+        Finds all image paths from the root path
 
         Returns
         -------
