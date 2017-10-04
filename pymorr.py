@@ -5,6 +5,7 @@ class Pymorr:
     def __init__(self):
         self.root = "" # represents the root path for all operations
         self.supported_types = ('*.jpg', '*.png', '*.jpeg')
+        preffered_folder = {'Keep': 'keep', 'Delete': 'delete', 'Maybe': 'maybe'}
 
     def set_root(self, input):
         """
@@ -52,6 +53,7 @@ class Pymorr:
         folder_to_move : str
             Just folder name that already exists under root.
             Will be used as 'root/folder_to_move'.
+            Should be used with 'preffered_folder'.
 
         Returns
         -------
