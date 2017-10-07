@@ -5,7 +5,7 @@ class Pymorr:
     def __init__(self):
         self.root = "" # represents the root path for all operations
         self.supported_types = ('*.jpg', '*.png', '*.jpeg')
-        preffered_folder = {'Keep': 'keep', 'Delete': 'delete', 'Maybe': 'maybe'}
+        self.prefered_folder = {'Keep': 'keep', 'Delete': 'delete', 'Maybe': 'maybe'}
 
     def set_root(self, input):
         """
