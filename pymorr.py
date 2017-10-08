@@ -63,3 +63,22 @@ class Pymorr:
         destination = os.path.join(self.root, folder_to_move, os.path.basename(image))
         os.rename(image, os.path.join(image, destination))
         return destination
+
+    def create_if_not_exists(self, folder):
+        """
+        Checks if a disred folder under root exists and if not creates it.
+
+        Parameters
+        ----------
+        folder : str
+            Folder name. Will be used as root/folder
+
+        Returns
+        -------
+        str
+            Full path of folder to check.
+        """
+        directory = os.path.join(self.root, folder)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        return directory
