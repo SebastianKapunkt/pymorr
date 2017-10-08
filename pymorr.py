@@ -43,7 +43,8 @@ class Pymorr:
 
     def move_image_to_folder_under_root(self, image, folder_to_move):
         """
-        Moves an image to a desired folder.
+        Moves an image to a desired folder and checks before
+        if the folder exists.
 
         Parameters
         ----------
@@ -60,7 +61,8 @@ class Pymorr:
         str
             Full path of the image after move.
         """
-        destination = os.path.join(self.root, folder_to_move, os.path.basename(image))
+        directory = self.create_if_not_exists(folder_to_move)
+        destination = os.path.join(directory, os.path.basename(image))
         os.rename(image, os.path.join(image, destination))
         return destination
 
