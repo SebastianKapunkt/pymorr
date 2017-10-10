@@ -68,7 +68,7 @@ class Pymorr:
 
     def create_if_not_exists(self, folder):
         """
-        Checks if a disred folder under root exists and if not creates it.
+        Checks if a desired folder under root exists and if not creates it.
 
         Parameters
         ----------
