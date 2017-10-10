@@ -41,10 +41,10 @@ class Pymorr:
             files_grabbed.extend(glob.glob(os.path.join(self.root, files)))
         return files_grabbed
 
-    def move_image_to_folder_under_root(self, image, folder_to_move):
+    def move_image(self, image, folder_to_move):
         """
-        Moves an image to a desired folder and checks before
-        if the folder exists.
+        Moves an image to a desired folder under root and checks before
+        if the folder exists. 'root/folder_to_move'
 
         Parameters
         ----------
