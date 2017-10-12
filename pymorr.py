@@ -1,12 +1,13 @@
 import os
 import glob
+import json
 
 class Pymorr:
     def __init__(self):
         self.root = "" # represents the root path for all operations
         self.supported_types = ('*.jpg', '*.png', '*.jpeg')
         self.prefered_folder = {'Keep': 'keep', 'Delete': 'delete', 'Maybe': 'maybe'}
-        self.image_index = 'index.txt'
+        self.image_index = 'index.json'
 
     def set_root(self, input):
         """
@@ -46,7 +47,7 @@ class Pymorr:
         """
         Moves an image to a desired folder under root and checks before
         if the folder exists. 'root/folder_to_move'
-        Also adds the move to the log file 'index.txt'. 
+        Also adds the move to the log file 'index.json'.
 
         Parameters
         ----------
@@ -90,7 +91,11 @@ class Pymorr:
 
     def add_image_to_log(self, path_before, path_after):
         """
-        Appends two paths to the bottom of a file.
+        Appends the data as json to the index.json.
+        {
+            "path_before": "path_before", 
+            "path_after": "path_after"
+        }
 
         Parameters
         ----------
@@ -101,10 +106,15 @@ class Pymorr:
             The full path after a change.
         """
         image_index_path = os.path.join(self.root,self.image_index)
-
+        entry = {'path_before': path_before, 'path_after': path_after}
         if os.path.isfile(image_index_path):
-            with open(image_index_path, "a") as myfile:
-                myfile.write("\n'{}','{}'".format(path_before, path_after))
+            with open(image_index_path) as json_file:
+                 json_file_content = json.load(json_file)
+            json_file_content.append(entry)
+            with open(image_index_path, mode='w') as json_file:
+                json_file.write(json.dumps(json_file_content, indent=2))
         else:
-            with open(image_index_path, "a") as myfile:
-                myfile.write("'{}','{}'".format(path_before, path_after))
+            new_json_array = []
+            new_json_array.append(entry)
+            with open(image_index_path, mode='w') as json_file:
+                json_file.write(json.dumps(new_json_array, indent=2))
