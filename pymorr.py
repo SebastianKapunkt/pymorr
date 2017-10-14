@@ -2,11 +2,16 @@ import os
 import glob
 import json
 
+
 class Pymorr:
     def __init__(self):
-        self.root = "" # represents the root path for all operations
+        self.root = ""  # represents the root path for all operations
         self.supported_types = ('*.jpg', '*.png', '*.jpeg')
-        self.prefered_folder = {'Keep': 'keep', 'Delete': 'delete', 'Maybe': 'maybe'}
+        self.prefered_folder = {
+            'Keep': 'keep',
+            'Delete': 'delete',
+            'Maybe': 'maybe'
+        }
         self.image_index = 'index.json'
 
     def set_root(self, input):
@@ -67,7 +72,7 @@ class Pymorr:
         directory = self.create_if_not_exists(folder_to_move)
         destination = os.path.join(directory, os.path.basename(image))
         os.rename(image, os.path.join(image, destination))
-        self.add_image_to_log(image,destination)
+        self.add_image_to_log(image, destination)
         return destination
 
     def create_if_not_exists(self, folder):
@@ -93,7 +98,7 @@ class Pymorr:
         """
         Appends the data as json to the index.json.
         {
-            "path_before": "path_before", 
+            "path_before": "path_before",
             "path_after": "path_after"
         }
 
@@ -105,11 +110,11 @@ class Pymorr:
         path_after : str
             The full path after a change.
         """
-        image_index_path = os.path.join(self.root,self.image_index)
+        image_index_path = os.path.join(self.root, self.image_index)
         entry = {'path_before': path_before, 'path_after': path_after}
         if os.path.isfile(image_index_path):
             with open(image_index_path) as json_file:
-                 json_file_content = json.load(json_file)
+                json_file_content = json.load(json_file)
             json_file_content.append(entry)
             with open(image_index_path, mode='w') as json_file:
                 json_file.write(json.dumps(json_file_content, indent=2))
