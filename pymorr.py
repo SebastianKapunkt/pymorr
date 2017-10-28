@@ -123,3 +123,23 @@ class Pymorr:
             new_json_array.append(entry)
             with open(image_index_path, mode='w') as json_file:
                 json_file.write(json.dumps(new_json_array, indent=2))
+
+    def undo_last_move(self):
+        """
+        Looks up the last move in index.json and moves
+        the file back to the location it was before (tracked by log).
+        """
+        image_index_path = os.path.join(self.root, self.image_index)
+        with open(image_index_path, mode='r') as json_file:
+            json_file_content = json.load(json_file)
+
+        image_to_move = json_file_content[len(json_file_content) - 1]
+        path_after = image_to_move["path_after"]
+        path_before = image_to_move["path_before"]
+
+        json_file_content.pop(len(json_file_content) - 1)
+
+        with open(image_index_path, mode='w') as json_file:
+            json_file.write(json.dumps(json_file_content, indent=2))
+
+        os.rename(path_after, path_before)
