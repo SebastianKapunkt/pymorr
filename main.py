@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import (QAction, QApplication, QDesktopWidget,
                              QPushButton, QWidget)
 
 import pymorr
+from view_utils import percentage_value, set_image_to_widget ,set_widget_height
 
 
 class Pymorr_View(QMainWindow):
@@ -22,9 +23,6 @@ class Pymorr_View(QMainWindow):
         self.show_current_image()
 
     def initUI(self):
-
-        self.directory_label_content = QLabel(self.morr.root)
-
         self.keep_btn = QPushButton('Keep', self)
         self.keep_btn.clicked.connect(self.move_image_to_keep)
 
@@ -37,18 +35,27 @@ class Pymorr_View(QMainWindow):
         self.undo_btn = QPushButton('Undo', self)
         self.undo_btn.clicked.connect(self.undo_last_move)
 
-        self.pic = QLabel(self)
+        self.current_image = QLabel(self)
+        self.current_image.setAlignment(QtCore.Qt.AlignCenter)
+        self.previous_image_1 = QLabel(self)
+        self.previous_image_2 = QLabel(self)
+        self.next_image_1 = QLabel(self)
+        self.next_image_1.setAlignment(QtCore.Qt.AlignCenter)
+        self.next_image_2 = QLabel(self)
+        self.next_image_2.setAlignment(QtCore.Qt.AlignCenter)
 
         grid = QGridLayout()
-        grid.setSpacing(10)
+        grid.setSpacing(0)
 
-        grid.addWidget(self.directory_label_content, 0, 0)
-        grid.addWidget(self.undo_btn, 0, 1)
-
-        grid.addWidget(self.pic, 1, 0, 1, 3)
+        grid.addWidget(self.current_image, 0, 0, 1, 0)
+        grid.addWidget(self.next_image_2, 1, 0)
+        grid.addWidget(self.next_image_1, 1, 1)
+        grid.addWidget(self.previous_image_1, 1, 3)
+        grid.addWidget(self.previous_image_2, 1, 4)
         grid.addWidget(self.keep_btn, 2, 0)
         grid.addWidget(self.maybe_btn, 2, 1)
         grid.addWidget(self.delete_btn, 2, 2)
+        grid.addWidget(self.undo_btn, 2, 4)
 
         widget = QWidget(self)
         self.setCentralWidget(widget)
@@ -66,25 +73,42 @@ class Pymorr_View(QMainWindow):
         self.screenShape = QDesktopWidget().screenGeometry()
         self.setGeometry(0, 0, self.screenShape.width(),
                          self.screenShape.height())
-        self.setWindowTitle('File dialog')
+        self.setWindowTitle("pymorr {}".format(self.morr.root))
         self.show()
+
+        set_widget_height(self, self.current_image, 70)
+        set_widget_height(self, self.undo_btn, 5)
+        set_widget_height(self, self.keep_btn, 5)
+        set_widget_height(self, self.maybe_btn, 5)
+        set_widget_height(self, self.delete_btn, 5)
+        set_widget_height(self, self.next_image_2, 20)
+        set_widget_height(self, self.next_image_1, 20)
+        set_widget_height(self, self.previous_image_1, 20)
+        set_widget_height(self, self.previous_image_2, 20)
 
     def on_directory_selected(self):
         folder_path = QFileDialog.getExistingDirectory(
             self, 'Open Folder', '/')
-        self.directory_label_content.setText(folder_path)
+        self.setWindowTitle("pymorr {}".format(folder_path))
         self.morr.set_root(folder_path)
         self.show_current_image()
 
     def show_current_image(self):
         pictures = self.morr.get_image_paths_from_root()
         if len(pictures) > 0:
-            next_image = pictures[0]
-            self.image = QtGui.QPixmap(next_image).scaled(
-                self.screenShape.width() / 1.05, self.screenShape.height() / 1.2, QtCore.Qt.KeepAspectRatio)
-            self.pic.setPixmap(self.image)
+            set_image_to_widget(self, self.current_image, pictures[0], 69.5, 98)
         else:
-            self.pic.clear()
+            self.current_image.clear()
+
+        if len(pictures) > 1:
+            set_image_to_widget(self, self.next_image_1, pictures[1], 20, 19)
+        else:
+            self.next_image_1.clear()
+
+        if len(pictures) > 2:
+            set_image_to_widget(self, self.next_image_2, pictures[2], 20, 19)
+        else:
+            self.next_image_2.clear()
 
     def move_image_to_keep(self):
         self.move_image(self.morr.prefered_folder['Keep'])
