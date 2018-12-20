@@ -1,6 +1,6 @@
-import os
 import glob
 import json
+import os
 
 
 class Pymorr:
@@ -133,12 +133,11 @@ class Pymorr:
         with open(image_index_path, mode='r') as json_file:
             json_file_content = json.load(json_file)
 
-        if len(json_file_content) > 0 :
-
+        if len(json_file_content) > 0:
             image_to_move = json_file_content[len(json_file_content) - 1]
             path_after = image_to_move["path_after"]
             path_before = image_to_move["path_before"]
-        
+
             json_file_content.pop(len(json_file_content) - 1)
 
             with open(image_index_path, mode='w') as json_file:

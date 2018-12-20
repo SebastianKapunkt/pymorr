@@ -1,14 +1,14 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtWidgets import (QMainWindow, QLabel,
-                             QAction, QFileDialog,
-                             QApplication, QGridLayout,
-                             QWidget, QPushButton,
-                             QDesktopWidget)
-from PyQt5 import (QtGui, QtCore)
-import pymorr
 import sys
+
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtWidgets import (QAction, QApplication, QDesktopWidget,
+                             QFileDialog, QGridLayout, QLabel, QMainWindow,
+                             QPushButton, QWidget)
+
+import pymorr
 
 
 class Pymorr_View(QMainWindow):
@@ -106,10 +106,12 @@ class Pymorr_View(QMainWindow):
         self.morr.undo_last_move()
         self.show_current_image()
 
+
 def main():
     app = QApplication(sys.argv)
     pymorr = Pymorr_View()
     sys.exit(app.exec_())
+
 
 if __name__ == '__main__':
     main()
