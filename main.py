@@ -3,13 +3,14 @@
 
 import sys
 
-from PyQt5 import QtCore, QtGui
+from PyQt5.QtCore import Qt, QThreadPool
 from PyQt5.QtWidgets import (QAction, QApplication, QDesktopWidget,
                              QFileDialog, QGridLayout, QLabel, QMainWindow,
                              QPushButton, QWidget)
 
 import controller
-from view_utils import percentage_value, set_image_to_widget, set_widget_height
+from image_loader import ImageWorker
+from view_utils import set_widget_height, get_scale_pixmap
 
 
 class Pymorr_View(QMainWindow):
@@ -20,6 +21,8 @@ class Pymorr_View(QMainWindow):
         self.create_view_elements()
         self.set_event_listners()
         self.setup_layout()
+        # create threadpool
+        self.threadpool = QThreadPool()
         # attach view
         self.controller.attach_view(self)
         # finally show UI
@@ -34,15 +37,15 @@ class Pymorr_View(QMainWindow):
 
         # create image previews
         self.current_image = QLabel(self)
-        self.current_image.setAlignment(QtCore.Qt.AlignCenter)
+        self.current_image.setAlignment(Qt.AlignCenter)
         self.previous_image_1 = QLabel(self)
-        self.previous_image_1.setAlignment(QtCore.Qt.AlignCenter)
+        self.previous_image_1.setAlignment(Qt.AlignCenter)
         self.previous_image_2 = QLabel(self)
-        self.previous_image_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.previous_image_2.setAlignment(Qt.AlignCenter)
         self.next_image_1 = QLabel(self)
-        self.next_image_1.setAlignment(QtCore.Qt.AlignCenter)
+        self.next_image_1.setAlignment(Qt.AlignCenter)
         self.next_image_2 = QLabel(self)
-        self.next_image_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.next_image_2.setAlignment(Qt.AlignCenter)
 
         # create layout
         self.grid = QGridLayout()
@@ -104,56 +107,85 @@ class Pymorr_View(QMainWindow):
         self.setWindowTitle("pymorr {}".format(folder_path))
         self.controller.set_path(folder_path)
 
+    def start_image_worker(self, path, widget_name, width, height):
+        worker = ImageWorker(
+            path,
+            widget_name,
+            width,
+            height
+        )
+        worker.signals.result.connect(self.set_image)
+        self.threadpool.start(worker)
+
     def update_images(self, next_images, previous_images):
         # central image
         if len(next_images) > 0:
-            set_image_to_widget(
-                self,
-                self.current_image,
-                next_images[0], 70, 95
+            self.start_image_worker(
+                next_images[0],
+                'current_image',
+                90,
+                70
             )
         else:
             self.current_image.clear()
 
         # next upcoming picture
         if len(next_images) > 1:
-            set_image_to_widget(
-                self,
-                self.next_image_1,
-                next_images[1], 20, 19
+            self.start_image_worker(
+                next_images[1],
+                "next_image_1",
+                20,
+                19
             )
         else:
             self.next_image_1.clear()
 
         # second next upcoming picture
         if len(next_images) > 2:
-            set_image_to_widget(
-                self,
-                self.next_image_2,
-                next_images[2], 20, 19
+            self.start_image_worker(
+                next_images[2],
+                "next_image_2",
+                20,
+                19
             )
         else:
             self.next_image_2.clear()
 
         # prevoius image
         if len(previous_images) > 0:
-            set_image_to_widget(
-                self,
-                self.previous_image_1,
-                previous_images[len(previous_images) - 1], 20, 19
+            self.start_image_worker(
+                previous_images[len(previous_images) - 1],
+                "previous_image_1",
+                20,
+                19
             )
         else:
             self.previous_image_1.clear()
 
         # second prevoius image
         if len(previous_images) > 1:
-            set_image_to_widget(
-                self,
-                self.previous_image_2,
-                previous_images[len(previous_images) - 2], 20, 19
+            self.start_image_worker(
+                previous_images[len(previous_images) - 2],
+                "previous_image_2",
+                20,
+                19
             )
         else:
             self.previous_image_2.clear()
+
+    def set_image(self, holder):
+        pixmap = get_scale_pixmap(
+            self, holder.image, holder.height, holder.width)
+        if holder.widget_name == 'current_image':
+            self.current_image.setPixmap(pixmap)
+        if holder.widget_name == 'previous_image_1':
+            self.previous_image_1.setPixmap(pixmap)
+        if holder.widget_name == 'previous_image_2':
+            self.previous_image_2.setPixmap(pixmap)
+        if holder.widget_name == 'next_image_1':
+            self.next_image_1.setPixmap(pixmap)
+        if holder.widget_name == 'next_image_2':
+            self.next_image_2.setPixmap(pixmap)
 
     def move_image_to_keep(self):
         self.controller.move_image('Keep')
