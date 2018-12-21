@@ -24,6 +24,11 @@ class PymorrController(object):
     def get_path(self):
         self.morr.root
 
+    def set_path(self, path):
+        self.morr.set_root(path)
+        self.update_image_paths()
+        self.request_content()
+
     def update_image_paths(self):
         self.next_images = self.morr.get_image_paths_from_root()
         self.previous_images = self.morr.get_image_paths_from_log()

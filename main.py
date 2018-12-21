@@ -20,6 +20,7 @@ class Pymorr_View(QMainWindow):
         self.controller = controller
         self.create_view_elements()
         self.set_event_listners()
+        self.setup_menubar()
         self.setup_layout()
         # create threadpool
         self.threadpool = QThreadPool()
