@@ -48,6 +48,24 @@ class Pymorr:
             files_grabbed.extend(glob.glob(os.path.join(self.root, files)))
         return files_grabbed
 
+    def get_image_paths_from_log(self):
+        """
+        reads all image paths from log json
+
+        Returns
+        -------
+        list of str
+            paths of moved image files
+        """
+        image_index_path = os.path.join(self.root, self.image_index)
+        image_log_paths = []
+        if os.path.isfile(image_index_path):
+            with open(image_index_path) as json_file:
+                json_file_content = json.load(json_file)
+                for item in json_file_content:
+                    image_log_paths.append(item['path_after'])
+        return image_log_paths
+
     def move_image(self, image, folder_to_move):
         """
         Moves an image to a desired folder under root and checks before
