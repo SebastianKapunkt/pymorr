@@ -134,8 +134,8 @@ class Pymorr_View(QMainWindow):
             self.start_image_worker(
                 next_images[1],
                 "next_image_1",
-                20,
-                19
+                19,
+                20
             )
         else:
             self.next_image_1.clear()
@@ -145,8 +145,8 @@ class Pymorr_View(QMainWindow):
             self.start_image_worker(
                 next_images[2],
                 "next_image_2",
-                20,
-                19
+                19,
+                20
             )
         else:
             self.next_image_2.clear()
@@ -156,8 +156,8 @@ class Pymorr_View(QMainWindow):
             self.start_image_worker(
                 previous_images[len(previous_images) - 1],
                 "previous_image_1",
-                20,
-                19
+                19,
+                20
             )
         else:
             self.previous_image_1.clear()
@@ -167,8 +167,8 @@ class Pymorr_View(QMainWindow):
             self.start_image_worker(
                 previous_images[len(previous_images) - 2],
                 "previous_image_2",
-                20,
-                19
+                19,
+                20
             )
         else:
             self.previous_image_2.clear()
