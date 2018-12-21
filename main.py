@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import (QAction, QApplication, QDesktopWidget,
                              QPushButton, QWidget)
 
 import pymorr
-from view_utils import percentage_value, set_image_to_widget ,set_widget_height
+from view_utils import percentage_value, set_image_to_widget, set_widget_height
 
 
 class Pymorr_View(QMainWindow):
@@ -45,7 +45,9 @@ class Pymorr_View(QMainWindow):
         self.next_image_2.setAlignment(QtCore.Qt.AlignCenter)
 
         grid = QGridLayout()
-        grid.setSpacing(0)
+        grid.setSpacing(5)
+        grid.setContentsMargins(0, 0, 0, 0)
+        grid.layout().setContentsMargins(0, 0, 0, 0)
 
         grid.addWidget(self.current_image, 0, 0, 1, 0)
         grid.addWidget(self.next_image_2, 1, 0)
@@ -76,6 +78,7 @@ class Pymorr_View(QMainWindow):
         self.setWindowTitle("pymorr {}".format(self.morr.root))
         self.show()
 
+    def fit_widgets_to_window(self):
         set_widget_height(self, self.current_image, 70)
         set_widget_height(self, self.undo_btn, 5)
         set_widget_height(self, self.keep_btn, 5)
@@ -96,17 +99,18 @@ class Pymorr_View(QMainWindow):
     def show_current_image(self):
         pictures = self.morr.get_image_paths_from_root()
         if len(pictures) > 0:
-            set_image_to_widget(self, self.current_image, pictures[0], 69.5, 98)
+            set_image_to_widget(self, self.current_image,
+                                pictures[0], 70, 95)
         else:
             self.current_image.clear()
 
         if len(pictures) > 1:
-            set_image_to_widget(self, self.next_image_1, pictures[1], 20, 19)
+            set_image_to_widget(self, self.next_image_1, pictures[1], 20, 20)
         else:
             self.next_image_1.clear()
 
         if len(pictures) > 2:
-            set_image_to_widget(self, self.next_image_2, pictures[2], 20, 19)
+            set_image_to_widget(self, self.next_image_2, pictures[2], 20, 20)
         else:
             self.next_image_2.clear()
 
@@ -129,6 +133,11 @@ class Pymorr_View(QMainWindow):
     def undo_last_move(self):
         self.morr.undo_last_move()
         self.show_current_image()
+
+    def resizeEvent(self, event):
+        self.show_current_image()
+        self.fit_widgets_to_window()
+        QMainWindow.resizeEvent(self, event)
 
 
 def main():
