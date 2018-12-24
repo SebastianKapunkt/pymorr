@@ -17,3 +17,8 @@ def set_widget_height(qtview, widget, percentage):
     widget.setFixedHeight(
         percentage_value(percentage, qtview.height())
     )
+
+def set_widget_width(qtview, widget, percentage):
+    widget.setFixedWidth(
+        percentage_value(percentage, qtview.width())
+    )

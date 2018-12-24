@@ -41,9 +41,11 @@ class PymorrController(object):
             )
             self.previous_images.append(moved_path)
             self.next_images.pop(0)
+            self.view.hide_compare_widget()
             self.view.update_images(self.next_images, self.previous_images)
 
     def undo_last_move(self):
         self.morr.undo_last_move()
         self.update_image_paths()
         self.request_content()
+        self.view.hide_compare_widget()
