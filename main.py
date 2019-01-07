@@ -70,6 +70,9 @@ class Pymorr_View(QMainWindow):
         self.compare_close_box.setContentsMargins(0, 0, 0, 0)
         self.compare_close_box.layout().setContentsMargins(0, 0, 0, 0)
 
+        self.current_image.setStyleSheet("background-color: #999999;")
+        self.current_image.setContentsMargins(5,5,5,5)
+
     def setup_layout(self):
         grid = self.grid
 

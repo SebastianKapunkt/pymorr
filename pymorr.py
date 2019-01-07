@@ -6,7 +6,7 @@ import os
 class Pymorr:
     def __init__(self):
         self.root = ""  # represents the root path for all operations
-        self.supported_types = ('*.jpg', '*.png', '*.jpeg')
+        self.supported_types = ('*.jpg', '*.png', '*.jpeg', '*.JPG')
         self.prefered_folder = {
             'Keep': 'keep',
             'Delete': 'delete',
