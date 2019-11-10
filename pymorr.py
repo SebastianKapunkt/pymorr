@@ -30,7 +30,9 @@ class Pymorr:
         """Prints all files that are in the directory of root"""
         print('root' + self.root)
         if self.root:
-            return os.listdir(self.root)
+            files = os.listdir(self.root)
+            list.sort(files)
+            return files
         else:
             return os.listdir()
 
@@ -46,6 +48,7 @@ class Pymorr:
         files_grabbed = []
         for files in self.supported_types:
             files_grabbed.extend(glob.glob(os.path.join(self.root, files)))
+        list.sort(files_grabbed)
         return files_grabbed
 
     def get_image_paths_from_log(self):
